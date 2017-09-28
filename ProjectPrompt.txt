@@ -8,7 +8,7 @@ COMP7970 Group Project
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 Due Dec 14 by 4:59pm  
-Points 20  
+Points 20  // Very imp
 Submitting a file upload Available Sep 26 at 12am - Dec 14 at 4:59pm 
 3 months
 The course project will consist of four parts: 
