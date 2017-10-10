@@ -15,3 +15,39 @@ REQUIREMENTS:...
 
 PROPOSAL:
 
+We will proceed by implementing the Bayes Classigication algorithm on a data set. 
+
+To preform Bayes Classigication algorithm we must define Bayes' Theorem. Since we are using the theorem for classification, we want to determine 
+P(H|X), or "Posterior Probability." P(H|X) is made up of three parts: "evidence" (X), "hypothesis" (H), and "class" (C). Let X be a data tuple. X, is composed of measuments made on a set of N attributes. Let C be a specific class, and let H be a hypothesis to determine that X belongs to C. 
+
+//////////////////////////////
+
+To preform Bayes Classigication algorithm we must define Bayes' Theorem. 
+Let X be a data tuple("evidence"), and is composed of measuments made on a set of N attributes. Let C be a specific class, and let H be a hypothesis to determine that X belongs to C. Since we are using the theorem for classification, we want to determine P(H|X), or "Posterior Probability." Let P(H|X) be the probability that H holds given our "evidence" (or X.)
+Simply, theorem states that we are looking for the probability that the observed data turple belongs to a specified class, given we know the attribute discription of the observed data turple (book P350-8.3.1). 
+
+Baye's Theorem is as follows:
+	
+				 P(X|H) P(H)
+	P(H|X) = 	-------------
+				 	P(X)
+	
+
+
+
+//////////////////////////////
+
+P(H|X)
+X
+H
+C
+
+
+ The theorem states that we are looking for the probability that the observed data turple belongs to a specified class, given we know the attribute discription of the observed data turple (book P350-8.3.1). 
+ Na¨ıve
+
+
+////////////////////////////////////////////////////////////////////////
+
+In Bayesian terms, X is considered “evidence.” As usual, it is described by
+measurements made on a set of n attributes. Let H be some hypothesis such as that the data tuple X belongs to a specified class C. For classification problems, we want to determine P.HjX/, the probability that the hypothesis H holds given the “evidence” or observed data tuple X. In other words, we are looking for the probability that tuple X belongs to class C, given that we know the attribute description of X. 
