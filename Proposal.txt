@@ -16,6 +16,27 @@ REQUIREMENTS:...
 PROPOSAL:
 
 
+		- the particular problem to be considered, 
+			- 
+			
+		- the algorithm to be implemented, 
+			- Bayes Classification Algorithm. 
+
+		- the datasets to be evaluated, 
+			- Collaboration network of Arxiv (small scale)
+			- Collaboration network of DBLP (large scale)
+
+		- where and how to get the data, 
+			- 
+
+		- the evaluation measures to be reported, 
+			- discribe bayes theorem
+			- discribe 5 steps of Nai**ve Bayesian Classification pg. 352
+
+		- a list of several references that will support the project. 
+
+
+
 //////////////////////////////
 
 To preform Bayes Classigication algorithm we must define Bayes' Theorem. 
