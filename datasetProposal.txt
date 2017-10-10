@@ -1,6 +1,13 @@
-For our Bayes' Theorem Classification project, we will be using the two datasets provided in the project description.
+For our Bayes' Theorem Classification project, we will be using the 
+two datasets provided in the project description.
 
-There are two datasets, directed and undirected graphs. The directed graph has 5242 Nodes and 28980 Edges. This data can easily be stored in a 5242 x 5242 matrix
-For the undirected graph, there are 317080 Nodes and 1049866 Edges. This larger dataset will be stored in a symmetric 317080 x 31708 matrix, where an edge at [A,B] means there is an edge at [B,A]
+There are two datasets, directed and undirected graphs. The directed 
+graph has 5242 Nodes and 28980 Edges. This data can easily be stored 
+in a 5242 x 5242 matrix. For the undirected graph, there are 317080 
+Nodes and 1049866 Edges. This larger dataset will be stored in a 
+symmetric 317080 x 31708 matrix, where an edge at [A,B] means there 
+is an edge at [B,A].
 
-We will let each Node, which represents an author of a paper, represent a data tuple (X). Each Edge, which represents a co-author relationship, will be the attributes of that data tuple.
+We will let each Node, which represents an author of a paper, represent
+a data tuple (X). Each Edge, which represents a co-author relationship, 
+will be the attributes of that data tuple.
