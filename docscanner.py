@@ -43,6 +43,21 @@ with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.tx
         if(dbPlace < 5242 * binSplit):
             intMatrix[5242][currentBin] += 1
         prevVal = val
-    for t in range(0, 5243):
-        print intMatrix[t]
+    biggestProb = 0.0
+    biggestProbCol = 0
+    for a in range(0, 5242):
+        for b in range(0, 10):
+            denominator = intMatrix[a][10] * intMatrix[5242][b]
+            if(denominator == 0):
+                denominator += 100000
+            numerator = 0.0 + intMatrix[a][b]
+            if(numerator/denominator > biggestProb):
+                biggestProb = numerator/denominator
+                biggestProbCol = b
+        print dictionary[a]
+        print intMatrix[a]
+        print biggestProbCol
+        print intMatrix[5242]
+        biggestProb = 0.0
+
 
