@@ -30,25 +30,46 @@ with open("/root/code/comp7970/Dataset/CA-GrQc.txt") as f:          # opens file
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 with open("/root/code/comp7970/Dataset/CA-GrQc.txt") as g:          # opens file
+    
+    binAmt = 10                                                     # number of bins to partition db
     totalRange = big - small                                        # db range
-    binwidth = totalRange/10                                        # num of authors that make up 1 bin
+    binwidth = totalRange/binAmt                                    # num of authors that make up 1 bin
     currentBin = 0
-    dbPlace = -1
+    dbRow = -1
     prevVal = ""
-    intMatrix = [[0 for x in xrange(10)] for y in xrange(totalAuthors)]
+    intMatrix = [[0 for x in xrange(binAmt)] for y in xrange(totalAuthors)]     # matrix[author][coAuthor Bins]
+    binTotal = [[0 for x in xrange(binAmt)] for y in xrange(totalAuthors)]      # binTotal += for each row 
+                                                                                    # ie:
+                                                                                    # row 1: binA = 1, binB = 4,...
+                                                                                    # row 2: binA = 1+2, binB = 4+1,...
+    binRowSum = [0 for x in xrange(totalAuthors)]                                                               # sum of bins 1-10 for each row        
     for i in range(0, totalAuthors):
-        for j in range(0, 10):
-            intMatrix[i][j] = 0
+        for j in range(0, binAmt):
+            intMatrix[i][j] = 0 
     for line in g:
         val, other = line.split()
         coauthVal = int(other)
         currentBin = (coauthVal - small - 1)/binwidth
         if(val != prevVal):
-            dbPlace = dbPlace + 1
-        if(dbPlace < totalAuthors):
-            if(currentBin == 10):
+            dbRow = dbRow + 1
+        if(dbRow < totalAuthors):
+            if(currentBin == binAmt):                               # checks for overflow
                 currentBin -= 1
-            intMatrix[dbPlace][currentBin] += 1
+            intMatrix[dbRow][currentBin] += 1
+            binRowSum[dbRow] += 1                                   # adds the total of the row
         prevVal = val
+
+        #sum of bins
+
+    count = 0
     for t in range(0, totalAuthors):
-        print intMatrix[t]
+        count += 1
+        print intMatrix[t], binRowSum[t], count
+    
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= 
+# SPLIT DATASET 
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=        
+    # split dataset into training/test data
+
+splitRatio = 0.7
