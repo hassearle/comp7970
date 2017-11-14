@@ -17,24 +17,32 @@ with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.tx
             small = dictionary[i]
 with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.txt") as g:
     totalRange = big - small
-    binwidth = totalRange/10
+    binWidth = totalRange/10
     currentBin = 0
+    rowTotal = 0
+    binSplit = 0.3
     dbPlace = -1
     prevVal = ""
-    intMatrix = [[0 for x in xrange(10)] for y in xrange(5242)]
-    for i in range(0, 5242):
-        for j in range(0, 10):
+    intMatrix = [[0 for x in xrange(11)] for y in xrange(5243)]
+    for i in range(0, 5243):
+        for j in range(0, 11):
             intMatrix[i][j] = 0
     for line in g:
         val, other = line.split()
         coauthVal = int(other)
-        currentBin = (coauthVal - small - 1)/binwidth
+        currentBin = (coauthVal - small - 1)/binWidth
         if(val != prevVal):
+            intMatrix[dbPlace][10] = rowTotal
+            rowTotal = 0
             dbPlace = dbPlace + 1
         if(dbPlace < 5242):
             if(currentBin == 10):
                 currentBin -= 1
             intMatrix[dbPlace][currentBin] += 1
+            rowTotal += 1
+        if(dbPlace < 5242 * binSplit):
+            intMatrix[5242][currentBin] += 1
         prevVal = val
-    for t in range(0, 5242):
+    for t in range(0, 5243):
         print intMatrix[t]
+
