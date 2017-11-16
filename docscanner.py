@@ -35,10 +35,11 @@ with open("/root/code/comp7970/Dataset/CA-GrQc.txt") as g:          # opens file
     totalRange = big - small                                        # db range
     binwidth = totalRange/binAmt                                    # num of authors that make up 1 bin
     currentBin = 0
+    prevBin = 0
     dbRow = -1
     prevVal = ""
     intMatrix = [[0 for x in xrange(binAmt)] for y in xrange(totalAuthors)]     # matrix[author][coAuthor Bins]
-    binTotal = [[0 for x in xrange(binAmt)] for y in xrange(totalAuthors)]      # binTotal += for each row 
+    binTotal = [0 for x in xrange(binAmt)]      # binTotal += for each row 
                                                                                     # ie:
                                                                                     # row 1: binA = 1, binB = 4,...
                                                                                     # row 2: binA = 1+2, binB = 4+1,...
@@ -51,12 +52,18 @@ with open("/root/code/comp7970/Dataset/CA-GrQc.txt") as g:          # opens file
         coauthVal = int(other)
         currentBin = (coauthVal - small - 1)/binwidth
         if(val != prevVal):
-            dbRow = dbRow + 1
+            dbRow += 1
         if(dbRow < totalAuthors):
             if(currentBin == binAmt):                               # checks for overflow
                 currentBin -= 1
             intMatrix[dbRow][currentBin] += 1
             binRowSum[dbRow] += 1                                   # adds the total of the row
+            
+            
+            if(prevBin != currentBin):
+                binTotal[currentBin] += intMatrix[dbRow][currentBin]
+                prevBin = currentBin
+        
         prevVal = val
 
         #sum of bins
@@ -64,7 +71,10 @@ with open("/root/code/comp7970/Dataset/CA-GrQc.txt") as g:          # opens file
     count = 0
     for t in range(0, totalAuthors):
         count += 1
-        print intMatrix[t], binRowSum[t], count
+        if count == 1 :
+            print intMatrix[t], binRowSum[t], binTotal, count
+        else: 
+            print intMatrix[t], binRowSum[t], count
     
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= 
