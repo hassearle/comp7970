@@ -66,6 +66,11 @@ with open("/root/code/comp7970/Dataset/CA-GrQc.txt") as g:          # opens file
         
         prevVal = val
 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # SPLIT DATASET
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # split dataset into training/test data
+
 splitRatio = .3
 splitTotal = splitRatio * totalAuthors
 trainingColMatrix = [0 for x in xrange(binAmt)]
@@ -76,22 +81,25 @@ print trainingColMatrix
 del a
 del b
 
+
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # IMPLEMENT BAYES
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # Use Bayes Algorithm on the data not in trianing set
 
 biggestProb = 0.0
-for a in range(int(splitTotal), 5242):
-        denominator = binRowSum[a] * trainingColMatrix[b]
 biggestProbCol = 0
+for a in range(int(splitTotal), 5242):
     for b in range(0, 10):
+        denominator = binRowSum[a] * trainingColMatrix[b]
         numerator = 0.0 + intMatrix[a][b]
         if (numerator / denominator > biggestProb):
-    print biggestProbCol + 1
-            biggestProbCol = b
             biggestProb = numerator / denominator
-    print trainingColMatrix
-    print intMatrix[a]
+            biggestProbCol = b
     print dictionary[a]
+    print intMatrix[a]
+    print biggestProbCol + 1
+    print trainingColMatrix
     biggestProb = 0.0
-
     # IMPLEMENT BAYES
