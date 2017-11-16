@@ -101,4 +101,3 @@ for a in range(int(splitTotal), 5242):
     print biggestProbCol + 1
     print trainingColMatrix
     biggestProb = 0.0
-
