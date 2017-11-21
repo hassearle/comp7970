@@ -8,6 +8,7 @@ dictionary = {}
 prevVal = ""
 with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.txt") as f:          # opens file
     totalAuthors = 5242
+    edgeTotal = 28980
     j = 0
     for line in f:                                                  # loops thru db
         val, trash = line.split()                                   #
@@ -65,23 +66,29 @@ with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.tx
                 prevBin = currentBin
         
         prevVal = val
+    del i
+    for i in range(0, 5242):
+        print intMatrix[i]
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # SPLIT DATASET
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # split dataset into training/test data
 
-splitRatio = .3
-splitTotal = splitRatio * totalAuthors
+splitRatio = .682
+splitTotal = int(splitRatio * totalAuthors)
 trainingColMatrix = [0 for x in xrange(binAmt)]
+evalColMatrix = [0 for y in xrange(binAmt)]
 trainingMatTotal = 0
-for a in range(0, int(splitTotal)):
+for a in range(0, 5242):
     for b in range(0, binAmt):
-        trainingColMatrix[b] += intMatrix[a][b]
-print trainingColMatrix
+        if(a < int(splitTotal)):
+            trainingColMatrix[b] += intMatrix[a][b]
+        evalColMatrix[b] += intMatrix[a][b]
+#print trainingColMatrix
 for c in range(0, binAmt):
     trainingMatTotal += trainingColMatrix[c]
-print trainingMatTotal
+#print trainingMatTotal
 del a, b, c, f, g, i, j, line, other, trash, x, y, big, small, coauthVal, currentBin, dbRow, prevVal, prevBin, splitRatio
 
 
@@ -89,13 +96,16 @@ del a, b, c, f, g, i, j, line, other, trash, x, y, big, small, coauthVal, curren
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # IMPLEMENT BAYES
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # Use Bayes Algorithm on the data not in trianing set
+    # Use Bayes Algorithm on the data not in training set and also set up evaluation data
 
 biggestProb = 0.0
+evalBiggestProb = 0.0
+evalBiggestProbCol = 0
+evalBiggestProbMat = [0 for t in xrange(0, 5242)]
 biggestProbCol = 0
 fldivision = 0.0
 biggestProbVis = [0 for x in xrange(0, 5242)]
-for a in range(int(splitTotal), 5242):
+for a in range(splitTotal, 5242):
     for b in range(0, 10):
         denominator = binRowSum[a] * trainingMatTotal
         numerator = trainingColMatrix[b] * intMatrix[a][b]
@@ -103,14 +113,32 @@ for a in range(int(splitTotal), 5242):
         if (fldivision > biggestProb):
             biggestProb = fldivision
             biggestProbCol = b + 1
+        evalDenom = binRowSum[a] * edgeTotal
+        evalNum = evalColMatrix[b] * intMatrix[a][b]
+        fldivision = float(evalNum)/float(evalDenom)
+        if(fldivision > evalBiggestProb):
+            evalBiggestProb = fldivision
+            evalBiggestProbCol = b + 1
     biggestProbVis[a] = biggestProbCol
-    #print dictionary[a]
-    #print intMatrix[a]
-    #print biggestProbCol
-    #print trainingColMatrix
+    evalBiggestProbMat[a] = evalBiggestProbCol
     biggestProb = 0.0
+    evalBiggestProb = 0.0
     # IMPLEMENT BAYES
-for x in range(0, 5242):
-    print intMatrix[x]
-    print binRowSum[x]
-    print biggestProbVis[x]
+del a, b
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # EVALUATION MEASURES
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # Check classes given to values outside of training data against themselves if they were in training data
+
+totalCorrect = 0
+totalPossible = totalAuthors - splitTotal
+for a in range(splitTotal, totalAuthors):
+    if(biggestProbVis[a] == evalBiggestProbMat[a]):
+        totalCorrect += 1
+recall = float(totalCorrect)/float(totalPossible)
+print recall
+
+
+
+
