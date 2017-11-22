@@ -1,4 +1,4 @@
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= 
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # SCANNER 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # indexes authors
@@ -75,21 +75,38 @@ with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.tx
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # split dataset into training/test data
 
-splitRatio = .682
-splitTotal = int(splitRatio * totalAuthors)
-trainingColMatrix = [0 for x in xrange(binAmt)]
 evalColMatrix = [0 for y in xrange(binAmt)]
-trainingMatTotal = 0
 for a in range(0, 5242):
     for b in range(0, binAmt):
-        if(a < int(splitTotal)):
-            trainingColMatrix[b] += intMatrix[a][b]
         evalColMatrix[b] += intMatrix[a][b]
-#print trainingColMatrix
-for c in range(0, binAmt):
-    trainingMatTotal += trainingColMatrix[c]
-#print trainingMatTotal
-del a, b, c, f, g, i, j, line, other, trash, x, y, big, small, coauthVal, currentBin, dbRow, prevVal, prevBin, splitRatio
+
+import random
+coefficient = 99.0/100.0
+holdoutMat = [[0 for x in xrange(10)] for y in xrange(5242)]
+for a in range(0, 5242):
+    for b in range(0, 10):
+        currentPos = random.uniform(0,1)
+        if(currentPos > coefficient):
+            holdoutMat[a][b] = 1
+        else:
+            holdoutMat[a][b] = 0
+for c in xrange(5242):
+    print holdoutMat[c]
+del a, b, c
+holdoutColMat = [[0 for x in xrange(10)] for y in xrange(10)]
+totalHAuth = [0 for x in xrange(10)]
+totalToRun = [0 for x in xrange(10)]
+for c in xrange(10):
+    for a in range(0, totalAuthors):
+        if(holdoutMat[a][c] == 0):
+            for b in range(0, binAmt):
+                holdoutColMat[c][b] += intMatrix[a][b]
+                totalHAuth[c] += intMatrix[a][b]
+        else:
+            totalToRun[c] += 1
+    print totalHAuth[c]
+del a, b, c, f, g, i, j, line, other, trash, x, y, big, small, coauthVal, currentBin, dbRow, prevVal, prevBin
+
 
 
 
@@ -98,47 +115,57 @@ del a, b, c, f, g, i, j, line, other, trash, x, y, big, small, coauthVal, curren
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # Use Bayes Algorithm on the data not in training set and also set up evaluation data
 
-biggestProb = 0.0
-evalBiggestProb = 0.0
-evalBiggestProbCol = 0
-evalBiggestProbMat = [0 for t in xrange(0, 5242)]
-biggestProbCol = 0
-fldivision = 0.0
-biggestProbVis = [0 for x in xrange(0, 5242)]
-for a in range(splitTotal, 5242):
-    for b in range(0, 10):
-        denominator = binRowSum[a] * trainingMatTotal
-        numerator = trainingColMatrix[b] * intMatrix[a][b]
-        fldivision = float(numerator)/float(denominator)
-        if (fldivision > biggestProb):
-            biggestProb = fldivision
-            biggestProbCol = b + 1
-        evalDenom = binRowSum[a] * edgeTotal
-        evalNum = evalColMatrix[b] * intMatrix[a][b]
-        fldivision = float(evalNum)/float(evalDenom)
-        if(fldivision > evalBiggestProb):
-            evalBiggestProb = fldivision
-            evalBiggestProbCol = b + 1
-    biggestProbVis[a] = biggestProbCol
-    evalBiggestProbMat[a] = evalBiggestProbCol
+def implement_bayes(column):
     biggestProb = 0.0
-    evalBiggestProb = 0.0
+    biggestProbCol = 0
+    biggestProbVis = [0 for x in xrange(5242)]
+    for a in range(0, 5242):
+        for b in range(0, 10):
+            denominator = binRowSum[a] * totalHAuth[column]
+            numerator = holdoutColMat[column][b] * intMatrix[a][b]
+            fldivision = float(numerator)/float(denominator)
+            if (fldivision > biggestProb):
+                biggestProb = fldivision
+                biggestProbCol = b + 1
+        biggestProbVis[a] = biggestProbCol
+        biggestProb = 0.0
+    return biggestProbVis
     # IMPLEMENT BAYES
-del a, b
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # EVALUATION MEASURES
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # Check classes given to values outside of training data against themselves if they were in training data
 
-totalCorrect = 0
-totalPossible = totalAuthors - splitTotal
-for a in range(splitTotal, totalAuthors):
-    if(biggestProbVis[a] == evalBiggestProbMat[a]):
-        totalCorrect += 1
-recall = float(totalCorrect)/float(totalPossible)
-print recall
+evalBiggestProb = 0.0
+evalBiggestProbCol = 0
+evalBiggestProbMat = [0 for t in xrange(0, 5242)]
+for a in xrange(5242):
+    for b in xrange(10):
+        evalDenom = binRowSum[a] * edgeTotal
+        evalNum = evalColMatrix[b] * intMatrix[a][b]
+        fldivision = float(evalNum)/float(evalDenom)
+        if(fldivision > evalBiggestProb):
+            evalBiggestProb = fldivision
+            evalBiggestProbCol = b + 1
+        evalBiggestProbMat[a] = evalBiggestProbCol
+        evalBiggestProb = 0.0
 
 
+def eval(column, testProbMatrix):
+    totalCorrect = 0
+    totalPossible = totalToRun[column]
+    for a in xrange(totalAuthors):
+        if(holdoutMat[a][column] == 1):
+            if(testProbMatrix[a] == evalBiggestProbMat[a]):
+                totalCorrect += 1
+    accuracy = float(totalCorrect)/float(totalPossible)
+    return accuracy
 
-
+for col in xrange(10):
+    biggestProbCol = implement_bayes(col)
+    for a in xrange(5242):
+        print biggestProbCol[a]
+        print intMatrix[a]
+        print
+    print eval(col, biggestProbCol)
