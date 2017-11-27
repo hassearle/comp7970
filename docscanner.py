@@ -78,7 +78,7 @@ def implement_bayes(coeff):
     colSum = [0 for x in xrange(binAmt)]
     maxRow = 0
     tDataEdges = 0
-    for a in xrange(5242):
+    for a in range(0, 5242):
         checker = random.uniform(0,1)
         if(checker > coeff):
             for b in xrange(10):
@@ -116,17 +116,18 @@ for a in xrange(totalAuthors):
         evalColMatrix[b] += intMatrix[a][b]
 evalBiggestProb = 0.0
 evalBiggestProbCol = 0
-evalBiggestProbMat = [0 for t in xrange(totalAuthors)]
+evalBiggestProbMat = [0 for x in xrange(totalAuthors)]
+evalBiggestProbBigMat = [[0 for x in xrange(binAmt)] for y in xrange(totalAuthors)]
 for a in xrange(totalAuthors):
     for b in xrange(binAmt):
         evalDenom = binRowSum[a] * edgeTotal
         evalNum = evalColMatrix[b] * intMatrix[a][b]
-        fldivision = float(evalNum)/float(evalDenom)
-        if(fldivision > evalBiggestProb):
-            evalBiggestProb = fldivision
+        if(evalNum > evalBiggestProb):
+            evalBiggestProb = evalNum
             evalBiggestProbCol = b + 1
-        evalBiggestProbMat[a] = evalBiggestProbCol
-        evalBiggestProb = 0.0
+        evalBiggestProbBigMat[a][b] = float(evalNum)/float(evalDenom)
+    evalBiggestProbMat[a] = evalBiggestProbCol
+    evalBiggestProb = 0.0
 
 
 def eval(mRow, testProbMatrix, TDMat):
@@ -137,11 +138,13 @@ def eval(mRow, testProbMatrix, TDMat):
     accuracy = float(totalCorrect)/float(mRow)
     return accuracy
 
-coefficient = 50.0/100.0
+coefficient = 85.0/100.0
 biggestProbMat, maxRow, testDataMat = implement_bayes(coefficient)
 for a in xrange(maxRow):
     print biggestProbMat[a]
     print evalBiggestProbMat[testDataMat[a][10]]
     print intMatrix[testDataMat[a][10]]
+    print evalColMatrix
+    print evalBiggestProbBigMat[testDataMat[a][10]]
     print "XXXXXXXXXXX"
 print eval(maxRow, biggestProbMat, testDataMat)
