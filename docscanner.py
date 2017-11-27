@@ -117,15 +117,12 @@ for a in xrange(totalAuthors):
 evalBiggestProb = 0.0
 evalBiggestProbCol = 0
 evalBiggestProbMat = [0 for x in xrange(totalAuthors)]
-evalBiggestProbBigMat = [[0 for x in xrange(binAmt)] for y in xrange(totalAuthors)]
 for a in xrange(totalAuthors):
     for b in xrange(binAmt):
-        evalDenom = binRowSum[a] * edgeTotal
         evalNum = evalColMatrix[b] * intMatrix[a][b]
         if(evalNum > evalBiggestProb):
             evalBiggestProb = evalNum
             evalBiggestProbCol = b + 1
-        evalBiggestProbBigMat[a][b] = float(evalNum)/float(evalDenom)
     evalBiggestProbMat[a] = evalBiggestProbCol
     evalBiggestProb = 0.0
 
@@ -138,13 +135,10 @@ def eval(mRow, testProbMatrix, TDMat):
     accuracy = float(totalCorrect)/float(mRow)
     return accuracy
 
-coefficient = 85.0/100.0
+coefficient = 1.0/100.0
 biggestProbMat, maxRow, testDataMat = implement_bayes(coefficient)
 for a in xrange(maxRow):
     print biggestProbMat[a]
     print evalBiggestProbMat[testDataMat[a][10]]
-    print intMatrix[testDataMat[a][10]]
-    print evalColMatrix
-    print evalBiggestProbBigMat[testDataMat[a][10]]
     print "XXXXXXXXXXX"
 print eval(maxRow, biggestProbMat, testDataMat)
