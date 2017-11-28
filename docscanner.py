@@ -1,9 +1,8 @@
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# SCANNER 
+# SCANNER
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # indexes authors
     # finds largest/smallest author
-
 dictionary = {}
 prevVal = ""
 with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.txt") as f:          # opens file
@@ -19,23 +18,21 @@ with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.tx
                 small = dictionary[j]
 
             if(dictionary[j] > big):                                # finds the largest author name
-                big = dictionary[j]
+                    big = dictionary[j]
             if(dictionary[j] < small):                              # finds the smallest author name
-                small = dictionary[j]    
-            
+                small = dictionary[j]
+
             prevVal = val
             j += 1
         
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= 
 # BINS 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.txt") as g:          # opens file
-    
-    binAmt = 10                                                     # number of bins to partition db
-    totalRange = big - small                                        # db range
-    binwidth = totalRange/binAmt                                    # num of authors that make up 1 bin
+with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.txt") as g:           # opens file
+    totalRange = big - small                                                                        # db range
+    binwidth = totalRange/binAmt                                                                    # num of authors that make up 1 bin
     currentBin = 0
+    binAmt = 10
     prevBin = 0
     dbRow = -1
     prevVal = ""
@@ -47,7 +44,7 @@ with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.tx
     binRowSum = [0 for x in xrange(totalAuthors)]                                   # sum of bins 1-10 for each row
     for i in range(0, totalAuthors):
         for j in range(0, binAmt):
-            intMatrix[i][j] = 0 
+            intMatrix[i][j] = 0
     for line in g:
         val, other = line.split()
         coauthVal = int(other)
@@ -59,13 +56,14 @@ with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.tx
                 currentBin -= 1
             intMatrix[dbRow][currentBin] += 1
             binRowSum[dbRow] += 1                                   # adds the total of the row
-            
-            
+
+
             if(prevBin != currentBin):
                 binTotal[currentBin] += intMatrix[dbRow][currentBin]
                 prevBin = currentBin
-        
+
         prevVal = val
+
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # IMPLEMENT BAYES
@@ -78,7 +76,7 @@ def implement_bayes(coeff):
     colSum = [0 for x in xrange(binAmt)]
     maxRow = 0
     tDataEdges = 0
-    for a in range(0, 5242):
+    for a in range(totalAuthors):
         checker = random.uniform(0,1)
         if(checker > coeff):
             for b in xrange(10):
