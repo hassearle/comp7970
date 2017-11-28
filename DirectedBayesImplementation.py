@@ -133,20 +133,32 @@ def eval(mRow, testProbMatrix, TDMat):
     accuracy = float(totalCorrect)/float(mRow)
     return accuracy
 
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # TIMING AND ACCURACY CHECK
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # Run Bayes on randomized sets of training and test data 10 times for each ratio of training data to total data. Check timing on each
+
 import timeit
 timeTaken = 0.0
 kRuns = 10
 accuracyMat = [0 for x in xrange(kRuns)]
+coeffMat = [0.01, 0.05, 0.1, 0.25, 0.4, 0.6, 0.75, 0.9, 0.95, 0.99]
 for a in xrange(kRuns):
     accuracy = 0.0
-    coefficient = raw_input("Enter coefficient as a decimal: ")
+    coefficient = coeffMat[a]
     start = timeit.default_timer()
+    thisRun = timeit.default_timer()
     coeff = float(coefficient)
     for b in xrange(10):
         biggestProbMat, maxRow, testDataMat = implement_bayes(coeff)
         accuracy += eval(maxRow, biggestProbMat, testDataMat)
     stop = timeit.default_timer()
+    thisStop = timeit.default_timer()
     timeTaken += (stop - start)
-    print accuracy/10.0
+    print "Run number:", a + 1
+    print coeffMat[a], "ratio of training data/total data"
+    print thisStop - thisRun, "seconds"
+    print accuracy * 10.0, "% correctly identified tuples on average over 10 runs"
+    print "XXXXXXXXXXXXX"
     accuracyMat[a] = accuracy/10.0
-print timeTaken
+print timeTaken, "total seconds taken for all runs"
