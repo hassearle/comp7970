@@ -121,17 +121,18 @@ def eval(mRow, testProbMatrix, TDMat):
     # Run Bayes on randomized sets of training and test data 10 times for each ratio of training data to total data. Check timing on each
 
 import timeit
+import math
 timeTaken = 0.0
 kRuns = 10
-accuracyMat = [0 for x in xrange(kRuns)]
 coeffMat = [0.01, 0.05, 0.1, 0.25, 0.4, 0.6, 0.75, 0.9, 0.95, 0.99]
 for a in xrange(kRuns):
+    numRuns = 10
     accuracy = 0.0
     coefficient = coeffMat[a]
     start = timeit.default_timer()
     thisRun = timeit.default_timer()
     coeff = float(coefficient)
-    for b in xrange(10):
+    for b in xrange(numRuns):
         biggestProbMat, maxRow, testDataMat = implement_bayes(coeff)
         accuracy += eval(maxRow, biggestProbMat, testDataMat)
     stop = timeit.default_timer()
@@ -140,7 +141,7 @@ for a in xrange(kRuns):
     print "Run number:", a + 1
     print coeffMat[a], "ratio of training data/total data"
     print thisStop - thisRun, "seconds"
-    print accuracy * 10.0, "% correctly identified tuples on average over 10 runs"
+    print "Number of test data tuples:", int(math.ceil((1 - coeffMat[a]) * totalAuthors))
+    print accuracy * (100.0/numRuns), "% correctly identified tuples on average over", numRuns, "runs"
     print "XXXXXXXXXXXXX"
-    accuracyMat[a] = accuracy/10.0
 print timeTaken, "total seconds taken for all runs"
