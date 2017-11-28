@@ -30,9 +30,9 @@ with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.tx
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\CA-GrQc2.txt") as g:           # opens file
     totalRange = big - small                                                                        # db range
+    binAmt = 10
     binwidth = totalRange/binAmt                                                                    # num of authors that make up 1 bin
     currentBin = 0
-    binAmt = 10
     prevBin = 0
     dbRow = -1
     prevVal = ""
@@ -133,10 +133,20 @@ def eval(mRow, testProbMatrix, TDMat):
     accuracy = float(totalCorrect)/float(mRow)
     return accuracy
 
-coefficient = 1.0/100.0
-biggestProbMat, maxRow, testDataMat = implement_bayes(coefficient)
-for a in xrange(maxRow):
-    print biggestProbMat[a]
-    print evalBiggestProbMat[testDataMat[a][10]]
-    print "XXXXXXXXXXX"
-print eval(maxRow, biggestProbMat, testDataMat)
+import timeit
+timeTaken = 0.0
+kRuns = 10
+accuracyMat = [0 for x in xrange(kRuns)]
+for a in xrange(kRuns):
+    accuracy = 0.0
+    coefficient = raw_input("Enter coefficient as a decimal: ")
+    start = timeit.default_timer()
+    coeff = float(coefficient)
+    for b in xrange(10):
+        biggestProbMat, maxRow, testDataMat = implement_bayes(coeff)
+        accuracy += eval(maxRow, biggestProbMat, testDataMat)
+    stop = timeit.default_timer()
+    timeTaken += (stop - start)
+    print accuracy/10.0
+    accuracyMat[a] = accuracy/10.0
+print timeTaken
