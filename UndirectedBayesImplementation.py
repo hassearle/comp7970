@@ -125,6 +125,7 @@ import math
 timeTaken = 0.0
 kRuns = 10
 coeffMat = [0.01, 0.05, 0.1, 0.25, 0.4, 0.6, 0.75, 0.9, 0.95, 0.99]
+timingMat = [0 for x in xrange(10)]
 for a in xrange(kRuns):
     numRuns = 10
     accuracy = 0.0
@@ -132,16 +133,28 @@ for a in xrange(kRuns):
     start = timeit.default_timer()
     thisRun = timeit.default_timer()
     coeff = float(coefficient)
+    evalTime = 0.0
+    bayesTime = 0.0
     for b in xrange(numRuns):
+        startBayes = timeit.default_timer()
         biggestProbMat, maxRow, testDataMat = implement_bayes(coeff)
+        stopBayes = timeit.default_timer()
+        bayesTime += stopBayes - startBayes
+        startEval = timeit.default_timer()
         accuracy += eval(maxRow, biggestProbMat, testDataMat)
+        stopEval = timeit.default_timer()
+        evalTime += (stopEval - startEval)
+    timingMat[a] = evalTime
     stop = timeit.default_timer()
     thisStop = timeit.default_timer()
     timeTaken += (stop - start)
     print "Run number:", a + 1
     print coeffMat[a], "ratio of training data/total data"
     print thisStop - thisRun, "seconds"
+    print bayesTime, "Seconds for Bayes"
+    print evalTime, "Seconds for evaluation"
     print "Number of test data tuples:", int(math.ceil((1 - coeffMat[a]) * totalAuthors))
     print accuracy * (100.0/numRuns), "% correctly identified tuples on average over", numRuns, "runs"
     print "XXXXXXXXXXXXX"
 print timeTaken, "total seconds taken for all runs"
+
