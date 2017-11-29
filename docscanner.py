@@ -6,7 +6,8 @@
 
 dictionary = {}
 prevVal = ""
-with open("/root/code/comp7970/Dataset/CA-GrQc.txt") as f:          # opens file
+with open("/root/code/comp7970/Dataset/CA-GrQc.txt") as f:          # REPLACE PATH HERE
+                                                                    # opens file
     totalAuthors = 5242
     j = 0
     for line in f:                                                  # loops thru db
@@ -29,7 +30,8 @@ with open("/root/code/comp7970/Dataset/CA-GrQc.txt") as f:          # opens file
 # BINS 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-with open("/root/code/comp7970/Dataset/CA-GrQc.txt") as g:          # opens file
+with open("/root/code/comp7970/Dataset/CA-GrQc.txt") as g:          # REPLACE PATH HERE
+                                                                    # opens file
     
     binAmt = 10                                                     # number of bins to partition db
     totalRange = big - small                                        # db range
@@ -43,7 +45,7 @@ with open("/root/code/comp7970/Dataset/CA-GrQc.txt") as g:          # opens file
                                                                                     # ie:
                                                                                     # row 1: binA = 1, binB = 4,...
                                                                                     # row 2: binA = 1+2, binB = 4+1,...
-    binRowSum = [0 for x in xrange(totalAuthors)]                                                               # sum of bins 1-10 for each row        
+    binRowSum = [0 for x in xrange(totalAuthors)]                                   # sum of bins 1-10 for each row        
     for i in range(0, totalAuthors):
         for j in range(0, binAmt):
             intMatrix[i][j] = 0 
