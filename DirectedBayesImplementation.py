@@ -173,7 +173,6 @@ for a in xrange(kRuns):
     print bayesTime, "Seconds for Bayes"
     print evalTime, "Seconds for evaluation"
     print "Number of test data tuples:", int(math.ceil((1 - coeffMat[a]) * totalAuthors))
-    print totInHome * (100.0/numRuns), "% of tuples in their home group on average over", numRuns, "runs"
     print accuracy * (100.0/numRuns), "% correctly identified tuples on average over", numRuns, "runs"
     print "XXXXXXXXXXXXX"
 print timeTaken, "total seconds taken for all runs"
