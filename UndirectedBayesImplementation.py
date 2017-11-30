@@ -17,7 +17,7 @@ with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\com-dblp.un
             if(int(val2) > biggest):
                 biggest = int(val2)
 intMatrix = [[0 for x in xrange(binAmt + 1)] for y in xrange(biggest + 1)]
-binWidth = biggest/binAmt + 1
+binwidth = biggest/binAmt + 1
 with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\com-dblp.ungraph.txt") as g:
     lineNum = 1
     for line in g:
@@ -27,8 +27,8 @@ with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\com-dblp.un
             val, val2 = line.split()
             firstPos = int(val)
             secondPos = int(val2)
-            firstBin = firstPos/binWidth
-            secondBin = secondPos/binWidth
+            firstBin = firstPos/binwidth
+            secondBin = secondPos/binwidth
             if(firstBin == binAmt):
                 firstBin -= 1
             if(secondBin == binAmt):
@@ -122,10 +122,10 @@ def checkHome():
     qtyTuplesInEachBin = [0 for x in xrange(binAmt)]
     stayHomeLikelihoodMat = [0 for x in xrange(binAmt)]
     for a in xrange(totalAuthors):
-        checker = evalBiggestProbMat[a][1] / binWidth
-        if checker == 10:
+        checker = evalBiggestProbMat[a][1] / binwidth
+        if (checker == 10):
             checker -= 1
-        if checker == (evalBiggestProbMat[a][0] - 1):
+        if (checker == (evalBiggestProbMat[a][0] - 1)):
             homeMat[checker] += 1
         totHighestProbInEachBin[evalBiggestProbMat[a][0] - 1] += 1
         qtyTuplesInEachBin[checker] += 1
@@ -133,11 +133,10 @@ def checkHome():
     for a in xrange(binAmt):
         homeDominanceMat[a] = 100.0 * (float(homeMat[a]) / float(totHighestProbInEachBin[a]))
         stayHomeLikelihoodMat[a] = 100.0 * (float(homeMat[a]) / float(qtyTuplesInEachBin[a]))
-    print qtyTuplesInEachBin
-    print "Probability a tuple stays in it's own bin:", stayHomeLikelihoodMat
-    print totHighestProbInEachBin
-    print "Probability a tuple in a probability bin is in its home bin as well:", homeDominanceMat
-    return homeMat
+    for a in xrange(binAmt):
+        print "Probability a tuple in bin", a + 1, "stays in it's own bin:                  ", "%.2f" % stayHomeLikelihoodMat[a], "%"
+        print "Probability a tuple in highest probability bin", a + 1, "is in its home bin: ", "%.2f" % homeDominanceMat[a], "%"
+        print "-------------------------------------------------------------------------------"
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # TIMING AND ACCURACY CHECK
@@ -151,36 +150,30 @@ kRuns = 10
 coeffMat = [0.01, 0.05, 0.1, 0.25, 0.4, 0.6, 0.75, 0.9, 0.95, 0.99]
 timingMat = [0 for x in xrange(10)]
 for a in xrange(kRuns):
-    numRuns = 1
+    numRuns = 10
     accuracy = 0.0
+    acc1 = 0.0
     coefficient = coeffMat[a]
     start = timeit.default_timer()
-    thisRun = timeit.default_timer()
     coeff = float(coefficient)
     evalTime = 0.0
     bayesTime = 0.0
     for b in xrange(numRuns):
-        startBayes = timeit.default_timer()
         biggestProbMat, maxRow, testDataMat = implement_bayes(coeff)
-        stopBayes = timeit.default_timer()
-        bayesTime += stopBayes - startBayes
-        startEval = timeit.default_timer()
         accuracy += eval(maxRow, biggestProbMat, testDataMat)
-        stopEval = timeit.default_timer()
-        evalTime += (stopEval - startEval)
-    timingMat[a] = evalTime
     stop = timeit.default_timer()
-    thisStop = timeit.default_timer()
     timeTaken += (stop - start)
     print "Run number:", a + 1
-    print coeffMat[a], "ratio of training data/total data"
-    print thisStop - thisRun, "seconds"
-    print bayesTime, "Seconds for Bayes"
-    print evalTime, "Seconds for evaluation"
-    print "Number of test data tuples:", int(math.ceil((1 - coeffMat[a]) * totalAuthors))
-    print accuracy * (100.0/numRuns), "% correctly identified tuples on average over", numRuns, "runs"
-    print "XXXXXXXXXXXXX"
-print timeTaken, "total seconds taken for all runs"
-checking = checkHome()
-print checking
+    print "--------------"
+    print "Ratio of training data to total data:        ", coeffMat[a]
+    print "Time for this run:                           ", stop - start
+    print "Number of test data tuples:                  ", int(math.ceil((1 - coeffMat[a]) * totalAuthors))
+    print "% Correctly identified tuples", numRuns, "run avg:    ",accuracy * (100.0/numRuns)
+    if(a < 9):
+        print "-------------------------------------------------------------------"
+    else:
+        print "-------------------------------------------------------------------------------"
+checkHome()
+print "Total run time:  ", timeTaken
+print "------------------------------"
 
