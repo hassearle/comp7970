@@ -96,24 +96,48 @@ for a in xrange(totalAuthors):
         evalColMatrix[b] += intMatrix[a][b]
 evalBiggestProb = 0.0
 evalBiggestProbCol = 0
-evalBiggestProbMat = [0 for x in xrange(totalAuthors)]
+evalBiggestProbMat = [[0 for x in xrange(2)] for y in xrange(totalAuthors)]
 for a in xrange(totalAuthors):
     for b in xrange(binAmt):
         evalNum = evalColMatrix[b] * intMatrix[a][b]
         if(evalNum > evalBiggestProb):
             evalBiggestProb = evalNum
             evalBiggestProbCol = b + 1
-    evalBiggestProbMat[a] = evalBiggestProbCol
+    evalBiggestProbMat[a][0] = evalBiggestProbCol
+    if a < 317079:
+        evalBiggestProbMat[a][1] = dictionary[a]
     evalBiggestProb = 0.0
-
 
 def eval(mRow, testProbMatrix, TDMat):
     totalCorrect = 0
     for a in xrange(mRow):
-        if(testProbMatrix[a] == evalBiggestProbMat[TDMat[a][10]]):
+        if testProbMatrix[a] == evalBiggestProbMat[TDMat[a][10]][0]:
             totalCorrect += 1
     accuracy = float(totalCorrect)/float(mRow)
     return accuracy
+
+def checkHome():
+    homeMat = [0 for x in xrange(binAmt)]
+    totHighestProbInEachBin = [0 for x in xrange(binAmt)]
+    qtyTuplesInEachBin = [0 for x in xrange(binAmt)]
+    stayHomeLikelihoodMat = [0 for x in xrange(binAmt)]
+    for a in xrange(totalAuthors):
+        checker = evalBiggestProbMat[a][1] / binWidth
+        if checker == 10:
+            checker -= 1
+        if checker == (evalBiggestProbMat[a][0] - 1):
+            homeMat[checker] += 1
+        totHighestProbInEachBin[evalBiggestProbMat[a][0] - 1] += 1
+        qtyTuplesInEachBin[checker] += 1
+    homeDominanceMat = [0 for x in xrange(binAmt)]
+    for a in xrange(binAmt):
+        homeDominanceMat[a] = 100.0 * (float(homeMat[a]) / float(totHighestProbInEachBin[a]))
+        stayHomeLikelihoodMat[a] = 100.0 * (float(homeMat[a]) / float(qtyTuplesInEachBin[a]))
+    print qtyTuplesInEachBin
+    print "Probability a tuple stays in it's own bin:", stayHomeLikelihoodMat
+    print totHighestProbInEachBin
+    print "Probability a tuple in a probability bin is in its home bin as well:", homeDominanceMat
+    return homeMat
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # TIMING AND ACCURACY CHECK
@@ -127,7 +151,7 @@ kRuns = 10
 coeffMat = [0.01, 0.05, 0.1, 0.25, 0.4, 0.6, 0.75, 0.9, 0.95, 0.99]
 timingMat = [0 for x in xrange(10)]
 for a in xrange(kRuns):
-    numRuns = 10
+    numRuns = 1
     accuracy = 0.0
     coefficient = coeffMat[a]
     start = timeit.default_timer()
@@ -157,4 +181,6 @@ for a in xrange(kRuns):
     print accuracy * (100.0/numRuns), "% correctly identified tuples on average over", numRuns, "runs"
     print "XXXXXXXXXXXXX"
 print timeTaken, "total seconds taken for all runs"
+checking = checkHome()
+print checking
 
