@@ -151,7 +151,7 @@ def checkHome():
         homeDominanceMat[a] = 100.0 * (float(homeMat[a]) / float(totHighestProbInEachBin[a]))
         stayHomeLikelihoodMat[a] = 100.0 * (float(homeMat[a]) / float(qtyTuplesInEachBin[a]))
     for a in xrange(binAmt):
-        print "Probability a tuple in bin", a + 1, "stays in it's own bin:                  ", "%.2f" % stayHomeLikelihoodMat[a], "%"
+        print "Probability a tuple in bin", a + 1, "stays in its own bin:                   ", "%.2f" % stayHomeLikelihoodMat[a], "%"
         print "Probability a tuple in highest probability bin", a + 1, "is in its home bin: ", "%.2f" % homeDominanceMat[a], "%"
         print "-------------------------------------------------------------------------------"
 
@@ -169,7 +169,6 @@ timingMat = [0 for x in xrange(10)]
 for a in xrange(kRuns):
     numRuns = 10
     accuracy = 0.0
-    acc1 = 0.0
     coefficient = coeffMat[a]
     start = timeit.default_timer()
     coeff = float(coefficient)
@@ -185,7 +184,7 @@ for a in xrange(kRuns):
     print "Ratio of training data to total data:        ", coeffMat[a]
     print "Time for this run:                           ", stop - start
     print "Number of test data tuples:                  ", int(math.ceil((1 - coeffMat[a]) * totalAuthors))
-    print "% Correctly identified tuples", numRuns, "run avg:    ",accuracy * (100.0/numRuns)
+    print "Correctly identified tuples", numRuns, "run avg%:     ",accuracy * (100.0/numRuns)
     if(a < 9):
         print "-------------------------------------------------------------------"
     else:
