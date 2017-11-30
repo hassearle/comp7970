@@ -1,3 +1,11 @@
+* python must be installed to runthe code
+* since the file was written in python, so no compilation is required
+* to run the code on a database, replace the path where indicated
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
 RULES FOR GITHUB
 =-=-=-=-=-=-=-=-=-=-=-
 
