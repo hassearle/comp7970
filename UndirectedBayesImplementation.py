@@ -5,7 +5,7 @@ totalAuthors = 317080
 edgeTotal = 1049866
 binAmt = 10
 biggest = 0
-with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\com-dblp.ungraph.txt") as f:
+with open("Dataset\com-dblp.ungraph.txt") as f:
     lineNum = 1
     for line in f:
         if(lineNum < 5):
@@ -18,7 +18,7 @@ with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\com-dblp.un
                 biggest = int(val2)
 intMatrix = [[0 for x in xrange(binAmt + 1)] for y in xrange(biggest + 1)]
 binwidth = biggest/binAmt + 1
-with open("C:\Users\Tyler\Documents\School 17-18\Big Data 17\Dataset\com-dblp.ungraph.txt") as g:
+with open("Dataset\com-dblp.ungraph.txt") as g:
     lineNum = 1
     for line in g:
         if(lineNum < 5):
