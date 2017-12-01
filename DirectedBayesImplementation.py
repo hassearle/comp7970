@@ -267,7 +267,7 @@ for a in xrange(kRuns):
     print "Ratio of training data to total data:                        ", coeffMat[a]
     print "Time for this run:                                           ", stop - start
     print "Number of test data tuples:                                  ", int(math.ceil((1 - coeffMat[a]) * totalAuthors))
-    print "Correctly identified tuples in holdout", numRuns, "run avg%:         ",holdoutAccuracy * (100.0/numRuns)
+    print "Correctly identified testtuples in holdout", numRuns, "run avg%:      ",holdoutAccuracy * (100.0/numRuns)
     print "Correctly identified train tuples in holdout", numRuns, "run avg%:    ", holdoutTrainingAccuracy * (100.0/numRuns)
     print "-------------------------------------------------------------------------------"
 checkHome()
